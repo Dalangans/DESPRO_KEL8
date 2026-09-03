@@ -14,8 +14,8 @@ Official repository for **Desain Proyek 1 & 2 (Kelompok 28)** — Department of 
 ## 📌 Project Overview & Architecture
 
 In post-disaster Search and Rescue (SAR) scenarios, structural instability and loss of GPS signals severely hamper human entry. REVEAL decouples spatial understanding into a two-path data pipeline:
-1. **Real-Time On-Board Path (Person B Domain):** Real-time localization, camera intrinsic calibration, and visual tracking using **ORB-SLAM3**.
-2. **Offline Base-Station Path (Person A Domain):** Photogrammetry and dense 3D point-cloud mapping using **COLMAP**.
+1. **Real-Time On-Board Path (Real-Time SLAM):** Real-time localization, camera intrinsic calibration, and visual tracking using **ORB-SLAM3**.
+2. **Offline Base-Station Path (Photogrammetry):** Photogrammetry and dense 3D point-cloud mapping using **COLMAP**.
 
 ```
 [ Camera Feed ] ───► [ Camera Calibration Matrix (K) ]
@@ -30,14 +30,35 @@ In post-disaster Search and Rescue (SAR) scenarios, structural instability and l
 
 ---
 
-## 🚀 Key Responsibilities (Person B — Module Scope)
+## 🚀 Team Responsibilities & Module Division
 
-This repository holds the software environment, simulation configurations, and hardware deployment pipeline for **Module B (Real-Time Positioning & Navigation Stack)**:
+Project REVEAL divides system development into 5 specialized technical modules:
 
-- [x] **Environment Setup:** Full native compilation of ORB-SLAM3 along with its key dependencies (`Pangolin`, `DBoW2`, `g2o`, `OpenCV`).
-- [x] **Simulation Verification:** Benchmarking monocular and RGB-D tracking pipeline against the **TUM Freiburg1_xyz** dataset.
-- [x] **Camera Calibration Pipeline:** Automated OpenCV checkerboard calibration routines for extracting intrinsic matrices ($K$) and lens distortion coefficients ($k_1, k_2, p_1, p_2$).
-- [x] **Hardware Deployment Strategy:** Tailoring ORB-SLAM3 configuration files (`.yaml`) for on-board deployment on **NVIDIA Jetson Nano (4GB LPDDR4)**.
+### 🔹 Person A — 3D Reconstruction & Photogrammetry (COLMAP)
+- [x] **Pipeline COLMAP:** Offline dense point-cloud & 3D mesh generation pipeline setup.
+- [x] **Dataset Validation:** Reconstruction experiments on benchmark datasets (*South Building*) and local room environments (*Gedung S UI*).
+- [x] **Model Rendering:** Feature matching optimization for high-density visual point clouds.
+
+### 🔹 Person B — Real-Time Positioning & Navigation Stack (ORB-SLAM3 - Nabiel Harits Utomo)
+- [x] **SLAM Stack Build:** Native compilation and dependency management of ORB-SLAM3 (`Pangolin`, `DBoW2`, `g2o`, `OpenCV`).
+- [x] **Simulation Verification:** Benchmarking monocular tracking performance against the **TUM Freiburg1_xyz** dataset.
+- [x] **Camera Calibration:** Automated OpenCV checkerboard calibration routines for intrinsic matrix ($K$) and distortion coefficients ($k_1, k_2, p_1, p_2$).
+- [x] **Embedded Deployment:** Tuning `.yaml` configs and frame rates for **NVIDIA Jetson Nano (4GB LPDDR4)** on-board execution.
+
+### 🔹 Person C — System Architecture, Communication & Literature Review
+- [x] **System Architecture:** Designing edge-to-base station communication block diagrams and network hierarchy.
+- [x] **Literature Synthesis:** Academic review of state-of-the-art visual SLAM and rescue robotics frameworks.
+- [x] **Data Transmission:** Planning bandwidth-efficient image stream transfers from robot to base station.
+
+### 🔹 Person D — Hardware Engineering & Power Systems
+- [x] **Mechanical Design:** Sizing and assembly design of the robot chassis, drive mechanisms, and camera mounts.
+- [x] **Power Distribution:** Circuit regulation for 5V/4A Jetson Nano power delivery and motor driver power management.
+- [x] **BOM & Budgeting:** Component procurement, cost optimization (~Rp 2 Million target), and bill-of-materials management.
+
+### 🔹 Person E — Embedded Control & Software Pipeline Integration
+- [x] **Data Pipeline Design:** Flowcharting dual-path real-time (SLAM) and offline (COLMAP) data synchronization.
+- [x] **Embedded Middleware:** Interfacing microcontrollers, motor drivers, and low-level actuation loops with the high-level OS.
+- [x] **System Integration:** Coordinating real-time trajectory output parsing to support navigation control.
 
 ---
 
@@ -100,3 +121,10 @@ python3 scripts/cameraCalibration.py
 
 - **Institution:** Department of Electrical Engineering, Universitas Indonesia (FTUI)
 - **Course:** Desain Proyek 1 & 2 (2026) — Kelompok 28
+- **Project Lead / Software Stack (Person B):** Nabiel Harits Utomo
+- **Team Members:**
+  - **Person A:** 3D Reconstruction & Photogrammetry Lead
+  - **Person B:** Real-Time SLAM & Positioning Lead
+  - **Person C:** System Architecture & Communication Lead
+  - **Person D:** Hardware & Power Systems Lead
+  - **Person E:** Embedded Control & Data Pipeline Lead
