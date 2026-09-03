@@ -100,4 +100,3 @@ python3 scripts/cameraCalibration.py
 
 - **Institution:** Department of Electrical Engineering, Universitas Indonesia (FTUI)
 - **Course:** Desain Proyek 1 & 2 (2026) — Kelompok 28
-- **Project Lead / Software Stack (Person B):** Nabiel Harits Utomo
