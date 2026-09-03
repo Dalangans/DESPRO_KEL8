@@ -1,6 +1,6 @@
 # 🤖 REVEAL — Real-Time Exploration & Visual Environment Analysis for Rescue Operations
 
-[![System OS](https://img.shields.io/badge/OS-Ubuntu%2020.04%20%2F%20Linux-orange?logo=ubuntu)](https://ubuntu.com/)
+[![System OS](https://img.shields.io/badge/OS-Ubuntu%2018.04%20%2F%20Linux-orange?logo=ubuntu)](https://ubuntu.com/)
 [![Algorithm](https://img.shields.io/badge/SLAM-ORB--SLAM3-blue)](https://github.com/UZ-SLAMLab/ORB_SLAM3)
 [![Reconstruction](https://img.shields.io/badge/3D%20Mapping-COLMAP-green)](https://colmap.github.io/)
 [![Hardware Support](https://img.shields.io/badge/Hardware-NVIDIA%20Jetson%20Nano%204GB-76B900?logo=nvidia)](https://developer.nvidia.com/embedded/jetson-nano-developer-kit)
