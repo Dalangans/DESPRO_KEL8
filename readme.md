@@ -59,28 +59,28 @@ In structural collapses caused by seismic activity, conventional 2D cameras fail
 
 ## 🚀 Team Responsibilities & Module Division
 
-### 🔹 Person A — 3D Reconstruction & Photogrammetry (COLMAP)
+### 🔹 Aliya — 3D Reconstruction & Photogrammetry (COLMAP)
 - [x] **Pipeline COLMAP Setup:** Configured SfM (Structure from Motion) and MVS (Multi-View Stereo) pipeline with CUDA acceleration.
 - [x] **Dataset Validation:** Reconstruction experiments on public datasets (*South Building*, 128 photos) and internal environment datasets (*Gedung S UI*, 85 photos).
 - [x] **Post-Processing:** Mesh filtering and Poisson surface reconstruction using **MeshLab**.
 
-### 🔹 Person B — Real-Time Positioning & Visual SLAM Stack (Nabiel Harits Utomo)
+### 🔹 Nabiel — Real-Time Positioning & Visual SLAM Stack
 - [x] **ORB-SLAM3 Stack Compilation:** Full native compilation of ORB-SLAM3 and dependencies (`Pangolin`, `DBoW2`, `g2o`, `OpenCV 3.2+`) on ARM64/x86 Ubuntu environments.
 - [x] **Simulation Benchmarking:** Verified tracking stability against the **TUM Freiburg1_xyz** benchmark dataset.
 - [x] **Camera Calibration Pipeline:** Automated OpenCV checkerboard calibration script to derive intrinsic matrix ($K$) and distortion parameters ($k_1, k_2, p_1, p_2$).
 - [x] **Jetson Deployment Strategy:** Optimization of `.yaml` configuration files and feature extraction limits for real-time Jetson Nano execution.
 
-### 🔹 Person C — System Architecture, Network Infrastructure & Literature
+### 🔹 Mirza — System Architecture, Network Infrastructure & Literature
 - [x] **System Architecture Design:** Edge-to-base station network block diagrams and communication flowcharts.
 - [x] **Literature Synthesis:** Comprehensive review of Visual-Inertial SLAM, EKF fusion, and PROSAC dynamic filtering.
 - [x] **Network Optimization:** Wi-Fi bandwidth allocation for streaming ROS Topics and JPEG-compressed video feeds (~22 Mbps).
 
-### 🔹 Person D — Mechanical Engineering, Power Systems & Budgeting
+### 🔹 Sabil — Mechanical Engineering, Power Systems & Budgeting
 - [x] **Hardware Assembly & CAD:** Mechanical chassis design, 3D printing custom casing, and camera mounting brackets.
 - [x] **Power Management:** Custom Power Distribution Board (PDB) & 5V/4A DC step-down regulator for Jetson Nano.
 - [x] **BOM Management:** Total component procurement and budget management targeting ~Rp 2.04 Million.
 
-### 🔹 Person E — Embedded Control & Software Pipeline Integration
+### 🔹 Audy — Embedded Control & Software Pipeline Integration
 - [x] **Data Pipeline Sync:** Designed dual-path flowcharts linking real-time SLAM streaming with offline `rosbag` logging.
 - [x] **Motor Actuation Middleware:** Custom ROS Node translation (`geometry_msgs/Twist` to PWM signals via `Jetson.GPIO`).
 - [x] **Teleoperation Setup:** Integration of `joy_node` for wireless PlayStation DualShock 3 teleoperation.
@@ -156,4 +156,4 @@ rosbag record -O reveal_session.bag /image_raw /imu/data /tf
 * **Audy Natalie Cecilia** (NPM: 2306266962)
 * **Mirza Wisnu Armano** (NPM: 2306156901)
 * **Muhammad Sabililhaq** (NPM: 2306202795)
-* **Nabiel Harits Utomo** (NPM: 2306267044) — *Module B / Real-Time SLAM Lead*
+* **Nabiel Harits Utomo** (NPM: 2306267044) 
