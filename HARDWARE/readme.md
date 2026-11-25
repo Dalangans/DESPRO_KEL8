@@ -178,17 +178,9 @@ The intended system development includes:
 ```text
 RC-Car-ORB-SLAM/
 │
-├── README.md
-│
-├── firmware/
-│   └── rc_car_4motor.ino
-│
 ├── hardware/
-│   ├── circuit-diagram/
-│   └── hardware-photos/
-│
-└── documentation/
-    └── system-architecture/
+│   ├── rc_car_4motor.ino
+│   └── README.md
 ```
 
 ## 10. Development Status
