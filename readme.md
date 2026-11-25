@@ -7,7 +7,7 @@
 [![Reconstruction](https://img.shields.io/badge/3D%20Mapping-COLMAP%204.0.3-brightgreen)](https://colmap.github.io/)
 [![Hardware](https://img.shields.io/badge/Compute-NVIDIA%20Jetson%20Nano%204GB-76B900?logo=nvidia)](https://developer.nvidia.com/embedded/jetson-nano-developer-kit)
 
-Official repository for **Desain Proyek 1 & 2 (Kelompok 28)** — Department of Electrical Engineering, Universitas Indonesia (FTUI).
+Official repository for **Desain Proyek 1 & 2 (Kelompok 8)** — Department of Electrical Engineering, Universitas Indonesia (FTUI).
 
 > **REVEAL** is a disaster-response teleoperated reconnaissance robotic framework designed for GPS-denied indoor environments. It streams visual and inertial data to track real-time robot trajectories (ORB-SLAM3) while logging data for offline high-fidelity 3D scene reconstruction (COLMAP) to assist Search and Rescue (SAR) teams during the critical **Golden Hour**.
 
@@ -148,7 +148,7 @@ rosbag record -O reveal_session.bag /image_raw /imu/data /tf
 ## 👥 Project Supervision & Team Members
 
 * **Institution:** Department of Electrical Engineering, Universitas Indonesia (FTUI)
-* **Course:** Desain Proyek 1 & 2 (2026) — Kelompok 28
+* **Course:** Desain Proyek 1 & 2 (2026) — Kelompok 8
 * **Academic Advisor:** Alfan Prasekal, S.T., M.Sc.(DIC)
 
 ### Team Members:
