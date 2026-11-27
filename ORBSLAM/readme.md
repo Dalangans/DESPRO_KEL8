@@ -1,8 +1,6 @@
 # Setup Guide: ORB-SLAM3 (`mono_webcam`) Remote Visualizer via XLaunch
 
-Panduan ini menjelaskan alur instalasi sistem, konfigurasi jaringan, kompilasi
-software, dan eksekusi GUI ORB-SLAM3 dari Jetson Nano ke laptop Windows
-menggunakan remote tunnel XLaunch.
+Panduan ini menjelaskan alur instalasi sistem, konfigurasi jaringan, kompilasi software, eksekusi GUI ORB-SLAM3 dari Jetson Nano (`dalangans-desktop`) ke laptop Windows menggunakan *reverse SSH tunnel* dan XLaunch, serta perekaman video (`orb_slam_record.avi`) secara bersamaan untuk kebutuhan pipeline COLMAP pada proyek REVEAL.
 
 ---
 
@@ -10,40 +8,37 @@ menggunakan remote tunnel XLaunch.
 
 ### 1.1 Burning image ke MicroSD Card
 
-1. Unduh **NVIDIA JetPack SDK Image** resmi (JetPack 4.6.1 / Ubuntu 18.04 LTS)
-   untuk Jetson Nano Developer Kit.
-2. Gunakan aplikasi **BalenaEtcher** atau **Raspberry Pi Imager** di laptop
-   Windows.
-3. Masukkan MicroSD Card (minimal 32 GB, Class 10 / UHS-I) ke card reader.
-4. Pilih file image `.img` / `.zip`, pilih drive MicroSD sebagai target, lalu
-   klik **Flash!**.
+1. Unduh **NVIDIA JetPack SDK Image** resmi (JetPack 4.6.1 / Ubuntu 18.04 LTS) untuk Jetson Nano Developer Kit.
+2. Gunakan aplikasi **BalenaEtcher** atau **Raspberry Pi Imager** di laptop Windows.
+3. Masukkan MicroSD Card (minimal 32 GB, Class 10 / UHS-I) ke *card reader*.
+4. Pilih file *image* `.img` / `.zip`, pilih *drive* MicroSD sebagai target, lalu klik **Flash!**.
 
 ### 1.2 Booting dan setup sistem awal
 
 1. Masukkan MicroSD Card ke slot di bagian bawah modul NVIDIA Jetson Nano.
-2. Hubungkan monitor via HDMI/DisplayPort, keyboard, mouse, serta catu daya
-   (5 V via Micro-USB atau Barrel Jack 5 V terkalibrasi).
-3. Ikuti wizard penyetelan awal Ubuntu 18.04:
+2. Hubungkan monitor via HDMI/DisplayPort, keyboard, mouse, serta catu daya 5 V yang teregulasi stabil (misalnya *buck converter* 5A yang diturunkan dari baterai 7.4V).
+3. Ikuti *wizard* penyetelan awal Ubuntu 18.04:
    - Terima EULA.
-   - Pilih bahasa (*English*) dan layout keyboard.
+   - Pilih bahasa (*English*) dan *layout* keyboard.
    - Atur zona waktu (*Asia/Jakarta*).
    - Buat akun pengguna:
      - **Username:** `dalangans`
      - **Hostname:** `dalangans-desktop`
      - **Password:** sesuai konfigurasi Anda.
-4. Selesaikan proses boot hingga masuk ke desktop Ubuntu (L4T).
+4. Selesaikan proses *boot* hingga masuk ke desktop Ubuntu (L4T).
 
 ---
 
 ## 2. Konfigurasi Jaringan dan Remote SSH
 
-### 2.1 Penyetelan Wi-Fi dan identifikasi IP
+### 2.1 Identifikasi IP (USB Device Mode & Wi-Fi)
 
-1. Hubungkan Jetson Nano ke jaringan Wi-Fi lokal.
-2. Buka terminal di Jetson Nano dan cek alamat IP:
+Anda dapat terhubung ke Jetson Nano melalui dua jalur:
+- **Koneksi USB Device Mode (kabel USB data langsung ke laptop Windows):** IP default Jetson Nano adalah `192.168.55.1`.
+- **Koneksi Wi-Fi / LAN lokal:** Cek alamat IP di terminal Jetson Nano dengan perintah:
 
-   ```bash
-   ifconfig
+  ```bash
+  ifconfig
    ```
 
    Contoh alamat IP:
@@ -78,10 +73,7 @@ sudo apt update && sudo apt install -y \
 
 ### 3.2 Build OpenCV dan Pangolin
 
-Pastikan OpenCV (versi 3.x / 4.x dengan modul `videoio` / GStreamer) dan
-Pangolin (0.6) telah terpasang di sistem.
-
-Tempatkan repositori ORB-SLAM3 di direktori `~/SLAM/ORB_SLAM3`.
+Pastikan OpenCV (dengan modul videoio / GStreamer) dan Pangolin telah terpasang di sistem, serta repositori ORB-SLAM3 berada di direktori ~/SLAM/ORB_SLAM3.
 
 ### 3.3 Kompilasi ORB-SLAM3
 
@@ -93,17 +85,18 @@ chmod +x build.sh
 ./build.sh
 ```
 
-Kompilasi executable `mono_webcam` secara khusus:
+Untuk mengompilasi ulang target mono_webcam saja (gunakan -j2 agar penggunaan memori di Jetson Nano tetap aman):
 
 ```bash
 cd ~/SLAM/ORB_SLAM3/build
 make -j2 mono_webcam
 ```
 
+Catatan: Berdasarkan konfigurasi build pada proyek ini, binary mono_webcam ter-output ke ~/SLAM/ORB_SLAM3/Examples/RGB-D/mono_webcam.
+
 ### 3.4 Konfigurasi parameter kamera (`cam_config.yaml`)
 
-Sesuaikan berkas `cam_config.yaml` di direktori `~/SLAM/ORB_SLAM3` dengan
-matriks intrinsik kamera USB Anda (320 × 240):
+Sesuaikan berkas ~/SLAM/ORB_SLAM3/cam_config.yaml dengan matriks intrinsik kamera USB (320 × 240):
 
 ```yaml
 %YAML:1.0
@@ -127,9 +120,7 @@ Camera.RGB: 1
 
 ## 4. Eksekusi GUI via XLaunch
 
-Metode ini meneruskan tampilan GUI Pangolin 3D dari Jetson Nano ke layar Windows
-tanpa VNC dan tanpa bergantung pada X11 forwarding otomatis dari `ssh.exe` yang
-dapat menghalangi pengaturan `$DISPLAY`.
+Metode ini meneruskan tampilan GUI Pangolin 3D dari Jetson Nano ke layar Windows melalui reverse SSH tunnel ke port X11 (`6000`).
 
 ### 4.1 Persiapan di laptop Windows
 
@@ -154,6 +145,10 @@ dapat menghalangi pengaturan `$DISPLAY`.
 
 Jalankan perintah SSH berikut di CMD Windows dan biarkan terminal ini tetap
 terbuka:
+
+```cmd
+ssh -R 6020:127.0.0.1:6000 -o ServerAliveInterval=15 -o ExitOnForwardFailure=yes dalangans@192.168.55.1
+```
 
 ```cmd
 ssh -R 6020:127.0.0.1:6000 -o ServerAliveInterval=15 -o ExitOnForwardFailure=yes dalangans@172.16.65.111
@@ -187,11 +182,32 @@ cd ~/SLAM/ORB_SLAM3
 ```
 
 ---
+## 5. Perekaman Video Bersama ORB-SLAM3 (`orb_slam_record.avi`) untuk COLMAP
 
-## 5. Troubleshooting
+Agar perekaman video berjalan bersamaan dengan mono_webcam menggunakan satu kamera tanpa konflik akses perangkat, penulisan frame (`cv::VideoWriter`) ditempatkan di dalam loop utama pembacaan frame pada `~/SLAM/ORB_SLAM3/Examples/Monocular/mono_webcam.cc` (sebelum `SLAM.TrackMonocular(im, timestamp)`).
+
+### 5.1 Alur edit, build ulang, dan ambil hasil rekaman
+
+1. Buat backup sebelum mengedit file sumber:
+   ```cmd
+   cp ~/SLAM/ORB_SLAM3/Examples/Monocular/mono_webcam.cc ~/SLAM/ORB_SLAM3/Examples/Monocular/mono_webcam.cc.bak
+   ```
+2. Tambahkan objek `cv::VideoWriter` untuk menulis ke `orb_slam_record.avi` (`320x240`, `30 FPS`, `MJPG`) di dalam loop pembacaan frame `cap >> im`, lalu panggil `video_out.release()` saat keluar dari loop.
+3. Kompilasi ulang:
+   ```cmd
+   cd ~/SLAM/ORB_SLAM3/build
+   make -j2 mono_webcam
+   ```
+4. Jalankan program dari `~/SLAM/ORB_SLAM3`, lalu hentikan dengan `Ctrl+C` (atau tutup jendela viewer dengan bersih) setelah selesai merekam agar file video tertutup sempurna.
+5. Salin file `orb_slam_record.avi` ke direktori lokal Windows (`D:\Univ\7th Semester\Despro\ORBSLAM`) melalui CMD Windows (sesuaikan IP dengan koneksi aktif Anda, misalnya `192.168.55.1`):
+   ```cmd
+   scp dalangans@192.168.55.1:~/SLAM/ORB_SLAM3/orb_slam_record.avi "D:\Univ\7th Semester\Despro\ORBSLAM"
+   ```
+
+## 6. Troubleshooting
 
 | Masalah / error | Penyebab utama | Solusi |
 | --- | --- | --- |
-| `Display localhost:20.0 Refused Connection` | XLaunch belum aktif atau tunnel terputus. | Pastikan XLaunch aktif di system tray Windows dan sesi SSH tunnel port `6000` → `6020` di CMD belum terputus. |
+| `Display localhost:20.0 Refused Connection` | XLaunch belum aktif, Disable access control masih tercentang, atau reverse SSH tunnel terputus. | Pastikan XLaunch aktif, Disable access control tidak dicentang, dan sesi `ssh -R 6020:127.0.0.1:6000 ...` masih tersambung. |
 | `Camera Failed to Open` | Kamera USB tidak terdeteksi atau sedang digunakan proses lain. | Cek `/dev/video*` dan pastikan perangkat kamera tidak sedang diakses aplikasi lain. |
 | Pangolin framebuffer crash | Kegagalan rendering OpenGL langsung. | Pastikan `export LIBGL_ALWAYS_INDIRECT=1` sudah dijalankan di terminal sebelum program dimulai. |
